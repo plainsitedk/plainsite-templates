@@ -60,20 +60,42 @@
     }
     @keyframes drawLine { to { width: 100%; } }
 
-    /* Fade in on scroll */
+    /* Fade in on scroll — bidirektionel */
     .reveal {
       opacity: 0;
       transform: translateY(28px);
       transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
                   transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal.above   { opacity: 0; transform: translateY(-16px); }
     .reveal-delay-1 { transition-delay: 0.1s; }
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* Form feedback */
+    .field-err-msg {
+      font-size: 0.75rem; color: #A85C3A;
+      margin-top: 0.35rem; opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .field-err-msg.visible { opacity: 1; transform: translateY(0); }
+    .form-input.field-error { border-color: #A85C3A !important; }
+    #formSuccessPoleret { display: none; text-align: center; padding: 3rem 0; }
+    #formSuccessPoleret.visible { display: block; }
+    .success-icon-pol {
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 1.5px solid #A85C3A;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 1.5rem;
+      animation: heroFade 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .btn-primary.loading { pointer-events: none; opacity: 0.7; }
+    .btn-primary .btn-label { transition: opacity 0.2s ease; }
+    .btn-primary .btn-spinner { display: none; }
+    .btn-primary.loading .btn-label { opacity: 0; }
+    .btn-primary.loading .btn-spinner { display: inline-block; }
 
     /* Hero fade in */
     .hero-fade { animation: heroFade 1s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; }
@@ -293,9 +315,7 @@
 
     <div class="grid md:grid-cols-3 gap-6">
       <div class="service-card reveal reveal-delay-1 bg-white/60 p-8 rounded-sm">
-        <div class="w-10 h-10 rounded-full bg-terra-pale flex items-center justify-center mb-6">
-          <div class="w-4 h-4 rounded-full bg-terra/40"></div>
-        </div>
+
         <h3 class="font-display text-2xl text-ink mb-3" style="letter-spacing: -0.01em;">Individuel terapi</h3>
         <p class="text-ink-soft text-sm leading-relaxed" style="line-height: 1.8;">
           Et trygt rum til at udforske dine tanker, følelser og mønstre. Jeg arbejder med angst, depression, lavt selvværd og livskriser.
@@ -304,9 +324,7 @@
       </div>
 
       <div class="service-card reveal reveal-delay-2 bg-white/60 p-8 rounded-sm">
-        <div class="w-10 h-10 rounded-full bg-terra-pale flex items-center justify-center mb-6">
-          <div class="w-4 h-4 rounded-full bg-terra/40"></div>
-        </div>
+
         <h3 class="font-display text-2xl text-ink mb-3" style="letter-spacing: -0.01em;">Parterapi</h3>
         <p class="text-ink-soft text-sm leading-relaxed" style="line-height: 1.8;">
           Hjælp til at styrke kommunikation, genopbygge tillid og finde vejen frem sammen — hvad end I er i krise eller ønsker at vokse.
@@ -315,9 +333,7 @@
       </div>
 
       <div class="service-card reveal reveal-delay-3 bg-white/60 p-8 rounded-sm">
-        <div class="w-10 h-10 rounded-full bg-terra-pale flex items-center justify-center mb-6">
-          <div class="w-4 h-4 rounded-full bg-terra/40"></div>
-        </div>
+
         <h3 class="font-display text-2xl text-ink mb-3" style="letter-spacing: -0.01em;">Traumeterapi</h3>
         <p class="text-ink-soft text-sm leading-relaxed" style="line-height: 1.8;">
           Blid og evidensbaseret bearbejdning af svære oplevelser. Jeg er uddannet i traumeinformeret terapi og EMDR.
@@ -374,42 +390,50 @@
       <p class="text-ink-soft mt-3 max-w-lg" style="line-height: 1.8;">Jeg tror på åbenhed om priser — ingen overraskelser.</p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="reveal reveal-delay-1 border border-terra/15 rounded-sm p-8 bg-white/40">
-        <h3 class="font-display text-2xl text-ink mb-2">Individuel session</h3>
-        <p class="font-display text-5xl text-terra mt-4 mb-1">950</p>
-        <p class="text-ink-soft text-sm mb-6">kr · 50 minutter</p>
-        <ul class="space-y-2 text-sm text-ink-soft">
-          <li class="flex gap-2"><span class="text-terra">–</span> Online via sikker video</li>
-          <li class="flex gap-2"><span class="text-terra">–</span> Fleksible tidspunkter</li>
-          <li class="flex gap-2"><span class="text-terra">–</span> Ugentlig eller hver 14. dag</li>
-        </ul>
-        <a href="#kontakt" class="btn-primary block text-center mt-8 py-3 text-sm font-medium rounded-sm">book nu</a>
+    <div>
+      <!-- Gratis opstart -->
+      <div class="reveal price-row grid items-center gap-x-8 gap-y-3 py-7 border-t divider-terra"
+           style="grid-template-columns: 1fr auto auto;">
+        <div>
+          <h3 class="font-display text-xl text-ink mb-1" style="letter-spacing: -0.01em;">Gratis opstartssamtale</h3>
+          <p class="text-sm text-terra mb-2">30 minutter · uforpligtende</p>
+          <p class="text-ink-soft text-sm max-w-md" style="line-height: 1.75;">
+            Lær mig at kende. Fortæl om hvad der bringer dig hertil. Ingen forpligtelse.
+          </p>
+        </div>
+        <p class="font-display text-3xl text-ink-soft hidden sm:block" style="letter-spacing: -0.02em; white-space: nowrap;">Gratis</p>
+        <a href="#kontakt" class="btn-ghost px-5 py-2.5 text-sm font-medium rounded-sm whitespace-nowrap">bestil</a>
       </div>
 
-      <div class="reveal reveal-delay-2 border border-terra rounded-sm p-8 bg-terra-pale/40 relative">
-        <span class="absolute top-4 right-4 text-xs font-medium bg-terra text-cream px-3 py-1 rounded-sm">Populær</span>
-        <h3 class="font-display text-2xl text-ink mb-2">Parterapi</h3>
-        <p class="font-display text-5xl text-terra mt-4 mb-1">1.350</p>
-        <p class="text-ink-soft text-sm mb-6">kr · 80 minutter</p>
-        <ul class="space-y-2 text-sm text-ink-soft">
-          <li class="flex gap-2"><span class="text-terra">–</span> For to personer</li>
-          <li class="flex gap-2"><span class="text-terra">–</span> Kommunikationsværktøjer</li>
-          <li class="flex gap-2"><span class="text-terra">–</span> Hjemmeopgaver inkl.</li>
-        </ul>
-        <a href="#kontakt" class="btn-primary block text-center mt-8 py-3 text-sm font-medium rounded-sm">book nu</a>
+      <!-- Individuel — fremhævet -->
+      <div class="reveal reveal-delay-1 price-row grid items-center gap-x-8 gap-y-3 py-7 border-t divider-terra -mx-6 px-6 lg:-mx-8 lg:px-8 rounded-sm"
+           style="grid-template-columns: 1fr auto auto; background: rgba(237, 217, 204, 0.25);">
+        <div>
+          <div class="flex flex-wrap items-center gap-3 mb-1">
+            <h3 class="font-display text-xl text-ink" style="letter-spacing: -0.01em;">Individuel session</h3>
+            <span class="text-xs font-medium bg-terra text-cream px-2.5 py-0.5 rounded-sm">Populær</span>
+          </div>
+          <p class="text-sm text-terra mb-2">50 minutter</p>
+          <p class="text-ink-soft text-sm max-w-md" style="line-height: 1.75;">
+            Enkeltvis eller som del af et forløb. Online i hele Danmark.
+          </p>
+        </div>
+        <p class="font-display text-3xl text-terra hidden sm:block" style="letter-spacing: -0.02em; white-space: nowrap;">950 kr</p>
+        <a href="#kontakt" class="btn-primary px-5 py-2.5 text-sm font-medium rounded-sm whitespace-nowrap">book nu</a>
       </div>
 
-      <div class="reveal reveal-delay-3 border border-terra/15 rounded-sm p-8 bg-white/40">
-        <h3 class="font-display text-2xl text-ink mb-2">Opstartssamtale</h3>
-        <p class="font-display text-5xl text-terra mt-4 mb-1">Gratis</p>
-        <p class="text-ink-soft text-sm mb-6">30 minutter</p>
-        <ul class="space-y-2 text-sm text-ink-soft">
-          <li class="flex gap-2"><span class="text-terra">–</span> Uforpligtende snak</li>
-          <li class="flex gap-2"><span class="text-terra">–</span> Find ud af om vi passer</li>
-          <li class="flex gap-2"><span class="text-terra">–</span> Ingen forberedelse krævet</li>
-        </ul>
-        <a href="#kontakt" class="btn-ghost block text-center mt-8 py-3 text-sm font-medium rounded-sm">bestil her</a>
+      <!-- Parterapi -->
+      <div class="reveal reveal-delay-2 price-row grid items-center gap-x-8 gap-y-3 py-7 border-t border-b divider-terra"
+           style="grid-template-columns: 1fr auto auto;">
+        <div>
+          <h3 class="font-display text-xl text-ink mb-1" style="letter-spacing: -0.01em;">Parterapi</h3>
+          <p class="text-sm text-terra mb-2">80 minutter</p>
+          <p class="text-ink-soft text-sm max-w-md" style="line-height: 1.75;">
+            For to. Ugentligt eller tilpasset jeres behov og hverdag.
+          </p>
+        </div>
+        <p class="font-display text-3xl text-ink-soft hidden sm:block" style="letter-spacing: -0.02em; white-space: nowrap;">1.350 kr</p>
+        <a href="#kontakt" class="btn-ghost px-5 py-2.5 text-sm font-medium rounded-sm whitespace-nowrap">book nu</a>
       </div>
     </div>
   </section>
@@ -533,20 +557,22 @@
       </div>
 
       <div class="reveal reveal-delay-1">
-        <form class="space-y-5" onsubmit="return false;">
+        <form id="polForm" class="space-y-5">
           <div class="grid sm:grid-cols-2 gap-5">
             <div>
-              <label class="block text-xs font-medium text-ink-soft uppercase tracking-wider mb-2">Navn</label>
-              <input type="text" placeholder="Dit navn" class="form-input w-full px-4 py-3 rounded-sm text-ink text-sm">
+              <label for="pNavn" class="block text-xs font-medium text-ink-soft uppercase tracking-wider mb-2">Navn</label>
+              <input id="pNavn" type="text" placeholder="Dit navn" class="form-input w-full px-4 py-3 rounded-sm text-ink text-sm">
+              <p id="pFejlNavn" class="field-err-msg">Skriv venligst dit navn</p>
             </div>
             <div>
-              <label class="block text-xs font-medium text-ink-soft uppercase tracking-wider mb-2">E-mail</label>
-              <input type="email" placeholder="din@email.dk" class="form-input w-full px-4 py-3 rounded-sm text-ink text-sm">
+              <label for="pEmail" class="block text-xs font-medium text-ink-soft uppercase tracking-wider mb-2">E-mail</label>
+              <input id="pEmail" type="email" placeholder="din@email.dk" class="form-input w-full px-4 py-3 rounded-sm text-ink text-sm">
+              <p id="pFejlEmail" class="field-err-msg">Skriv en gyldig e-mailadresse</p>
             </div>
           </div>
           <div>
-            <label class="block text-xs font-medium text-ink-soft uppercase tracking-wider mb-2">Hvad ønsker du hjælp til?</label>
-            <select class="form-input w-full px-4 py-3 rounded-sm text-ink text-sm appearance-none">
+            <label for="pYdelse" class="block text-xs font-medium text-ink-soft uppercase tracking-wider mb-2">Hvad ønsker du hjælp til?</label>
+            <select id="pYdelse" class="form-input w-full px-4 py-3 rounded-sm text-ink text-sm appearance-none">
               <option value="">Vælg ydelse</option>
               <option>Individuel terapi</option>
               <option>Parterapi</option>
@@ -555,12 +581,31 @@
             </select>
           </div>
           <div>
-            <label class="block text-xs font-medium text-ink-soft uppercase tracking-wider mb-2">Besked</label>
-            <textarea rows="4" placeholder="Fortæl kort om, hvad der bringer dig hertil..." class="form-input w-full px-4 py-3 rounded-sm text-ink text-sm resize-none"></textarea>
+            <label for="pBesked" class="block text-xs font-medium text-ink-soft uppercase tracking-wider mb-2">Besked</label>
+            <textarea id="pBesked" rows="4" placeholder="Fortæl kort om, hvad der bringer dig hertil..." class="form-input w-full px-4 py-3 rounded-sm text-ink text-sm resize-none"></textarea>
+            <p id="pFejlBesked" class="field-err-msg">Skriv en kort besked</p>
           </div>
-          <button type="submit" class="btn-primary w-full py-3.5 text-sm font-medium rounded-sm">send besked</button>
+          <button type="submit" id="pSendKnap" class="btn-primary w-full py-3.5 text-sm font-medium rounded-sm relative">
+            <span class="btn-label">send besked</span>
+            <span class="btn-spinner absolute inset-0 flex items-center justify-center">
+              <svg class="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+              </svg>
+            </span>
+          </button>
           <p class="text-xs text-ink-soft/60 text-center">Dine oplysninger behandles fortroligt efter GDPR.</p>
         </form>
+
+        <div id="formSuccessPoleret" role="status" aria-live="polite">
+          <div class="success-icon-pol">
+            <svg width="22" height="22" fill="none" stroke="#A85C3A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 12 9 17 20 6"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl text-ink mb-3" style="letter-spacing: -0.01em;">Tak for din besked</h3>
+          <p class="text-ink-soft text-base" style="line-height: 1.85;">Jeg vender tilbage inden for ét hverdagsdøgn.</p>
+        </div>
       </div>
 
     </div>
@@ -607,17 +652,56 @@
       bar3.style.transform = '';
     }
 
-    // Scroll reveal
+    // Bidirektionel scroll reveal
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+          entry.target.classList.remove('above');
+        } else {
+          entry.target.classList.remove('visible');
+          entry.target.classList.toggle('above', entry.boundingClientRect.top < 0);
         }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach(el => observer.observe(el));
+
+    // Form validering
+    const polForm = document.getElementById('polForm');
+    const pKnap = document.getElementById('pSendKnap');
+    function pSetErr(inId, errId, hasErr) {
+      document.getElementById(inId).classList.toggle('field-error', hasErr);
+      document.getElementById(errId).classList.toggle('visible', hasErr);
+      return !hasErr;
+    }
+    function pValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }
+    ['pNavn','pEmail','pBesked'].forEach(id => {
+      const errMap = { pNavn:'pFejlNavn', pEmail:'pFejlEmail', pBesked:'pFejlBesked' };
+      document.getElementById(id).addEventListener('input', () => {
+        document.getElementById(id).classList.remove('field-error');
+        document.getElementById(errMap[id]).classList.remove('visible');
+      });
+    });
+    polForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const ok = [
+        pSetErr('pNavn',   'pFejlNavn',   !document.getElementById('pNavn').value.trim()),
+        pSetErr('pEmail',  'pFejlEmail',  !pValidEmail(document.getElementById('pEmail').value)),
+        pSetErr('pBesked', 'pFejlBesked', !document.getElementById('pBesked').value.trim()),
+      ].every(Boolean);
+      if (!ok) { polForm.querySelector('.field-error')?.scrollIntoView({ behavior:'smooth', block:'center' }); return; }
+      pKnap.classList.add('loading');
+      setTimeout(() => {
+        polForm.style.cssText = 'transition:opacity 0.4s ease;opacity:0';
+        setTimeout(() => {
+          polForm.style.display = 'none';
+          const s = document.getElementById('formSuccessPoleret');
+          s.classList.add('visible');
+          s.scrollIntoView({ behavior:'smooth', block:'center' });
+        }, 400);
+      }, 1200);
+    });
 
     // FAQ accordion
     function toggleFaq(btn) {

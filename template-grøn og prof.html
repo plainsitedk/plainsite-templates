@@ -39,7 +39,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    section[id] { scroll-margin-top: 80px; }
+    section[id] { scroll-margin-top: 64px; }
     body { font-family: 'DM Sans', sans-serif; background: #EDE5D4; color: #141A12; }
 
     /* ─── Grain overlay ─── */
@@ -417,7 +417,7 @@
   </section>
 
   <!-- ════════════════════════════════════════ YDELSER ════ -->
-  <section id="ydelser" class="py-24 lg:py-32 px-6 lg:px-8 max-w-6xl mx-auto">
+  <section id="ydelser" class="py-16 lg:py-24 px-6 lg:px-8 max-w-6xl mx-auto">
     <div class="emerge mb-16">
       <p class="text-moss text-xs font-medium tracking-[0.2em] uppercase mb-4">Ydelser</p>
       <h2 class="font-display text-4xl lg:text-5xl text-forest" style="letter-spacing: -0.025em; line-height: 1.05;">Hvad jeg tilbyder</h2>
@@ -493,7 +493,7 @@
   </section>
 
   <!-- ════════════════════════════════════════ OM MIG ════ -->
-  <section id="om" class="py-24 lg:py-32 px-6 lg:px-8" style="background: linear-gradient(to bottom, #EDE5D4, #E0D4BF);">
+  <section id="om" class="py-16 lg:py-24 px-6 lg:px-8" style="background: linear-gradient(to bottom, #EDE5D4, #E0D4BF);">
     <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
       <!-- Photo -->
@@ -570,7 +570,7 @@
   </section>
 
   <!-- ════════════════════════════════════════ PRISER ════ -->
-  <section id="priser" class="py-24 lg:py-32 px-6 lg:px-8 max-w-6xl mx-auto">
+  <section id="priser" class="py-16 lg:py-24 px-6 lg:px-8 max-w-6xl mx-auto">
     <div class="emerge mb-14">
       <p class="text-moss text-xs font-medium tracking-[0.2em] uppercase mb-4">Priser</p>
       <h2 class="font-display text-4xl lg:text-5xl text-forest" style="letter-spacing: -0.025em; line-height: 1.05;">Åbenhed om priser</h2>
@@ -791,6 +791,13 @@
   </footer>
 
   <script>
+    // Scroll hint on load
+    window.addEventListener('load', () => {
+      if (!window.location.hash) {
+        setTimeout(() => window.scrollBy({ top: 60, behavior: 'smooth' }), 800);
+      }
+    });
+
     // Mobile menu
     const mBtn = document.getElementById('mBtn');
     const mMenu = document.getElementById('mobileMenu');

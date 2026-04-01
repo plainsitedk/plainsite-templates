@@ -36,14 +36,16 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Nunito Sans', sans-serif; background: #FAFAF8; color: #2C3235; }
 
-    /* Slow fade in */
+    /* Scroll-drevet animation */
     .drift {
       opacity: 0;
       transform: translateY(22px);
-      transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1),
-                  transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .drift.visible { opacity: 1; transform: translateY(0); }
+    /* Elementer der er scrollet forbi opadtil */
+    .drift.above { opacity: 0; transform: translateY(-16px); }
     .drift-d1 { transition-delay: 0.15s; }
     .drift-d2 { transition-delay: 0.3s; }
     .drift-d3 { transition-delay: 0.45s; }
@@ -575,16 +577,25 @@
       document.getElementById('mobileNavMenu').classList.toggle('hidden');
     });
 
-    // Scroll reveal
+    // Bidirektionel scroll-animation
     const drifters = document.querySelectorAll('.drift');
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
+          entry.target.classList.remove('above');
+        } else {
+          entry.target.classList.remove('visible');
+          if (entry.boundingClientRect.top < 0) {
+            // Element er scrollet forbi opad — glid op og forsvind
+            entry.target.classList.add('above');
+          } else {
+            // Element er endnu ikke kommet ind — nulstil til "kommer nedefra"
+            entry.target.classList.remove('above');
+          }
         }
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     drifters.forEach(el => obs.observe(el));
 
     // Kontaktformular — validering og feedback

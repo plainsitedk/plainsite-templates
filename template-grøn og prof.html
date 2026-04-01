@@ -39,6 +39,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    section[id], div[id] { scroll-margin-top: 72px; }
     body { font-family: 'DM Sans', sans-serif; background: #EDE5D4; color: #141A12; }
 
     /* ─── Grain overlay ─── */
@@ -137,9 +138,9 @@
       border-radius: 50%;
     }
 
-    /* ─── Photo arch ─── */
+    /* ─── Photo organic ─── */
     .photo-arch {
-      clip-path: ellipse(50% 55% at 50% 45%);
+      clip-path: path('M 240 0 C 340 0 480 80 480 240 C 480 400 380 490 240 490 C 100 490 0 390 0 240 C 0 80 140 0 240 0 Z');
       overflow: hidden;
     }
     .photo-arch-outer {
@@ -148,18 +149,26 @@
     .photo-arch-outer::before {
       content: '';
       position: absolute;
-      inset: -20px;
-      border-radius: 50% 50% 46% 54% / 54% 50% 50% 46%;
-      border: 1px solid rgba(74, 117, 88, 0.2);
+      inset: -18px;
+      border-radius: 38% 62% 46% 54% / 56% 44% 58% 42%;
+      border: 1px solid rgba(74, 117, 88, 0.22);
       z-index: 0;
     }
     .photo-arch-outer::after {
       content: '';
       position: absolute;
-      inset: -40px;
-      border-radius: 52% 48% 44% 56% / 48% 54% 46% 52%;
-      border: 1px solid rgba(140, 104, 50, 0.12);
+      inset: -36px;
+      border-radius: 54% 46% 40% 60% / 44% 58% 42% 56%;
+      border: 1px solid rgba(140, 104, 50, 0.14);
       z-index: 0;
+    }
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(74,117,88,0.12) 0%, transparent 60%);
+      mix-blend-mode: multiply;
+      z-index: 1;
+      pointer-events: none;
     }
 
     /* ─── Testimony ─── */
@@ -308,7 +317,7 @@
   </nav>
 
   <!-- ════════════════════════════════════════ HERO ════ -->
-  <section class="relative min-h-screen flex items-center overflow-hidden pt-16">
+  <section class="relative overflow-hidden pt-32 pb-28 lg:pt-44 lg:pb-36" style="min-height: 90vh;">
 
     <!-- Concentric ring decoration — top right -->
     <div class="absolute pointer-events-none" style="top: -8vh; right: -8vw; width: 55vw; max-width: 580px; opacity: 1;" aria-hidden="true">
@@ -334,7 +343,7 @@
     </div>
 
     <!-- Bottom-left botanical -->
-    <div class="absolute pointer-events-none hidden lg:block" style="bottom: 4vh; left: -2vw; width: 20vw; max-width: 200px; opacity: 0.07;" aria-hidden="true">
+    <div class="absolute pointer-events-none hidden lg:block" style="bottom: 4vh; left: -2vw; width: 20vw; max-width: 200px; opacity: 0.17;" aria-hidden="true">
       <svg viewBox="0 0 180 240" fill="none">
         <path d="M90 230 C88 190 85 160 90 130 C95 100 88 70 92 30" stroke="#4A7558" stroke-width="1.8" stroke-linecap="round"/>
         <path d="M91 175 C110 160 130 142 145 120" stroke="#4A7558" stroke-width="1.2" stroke-linecap="round"/>
@@ -350,7 +359,7 @@
     </div>
 
     <!-- Hero content -->
-    <div class="max-w-6xl mx-auto px-6 lg:px-8 w-full py-24 relative z-10">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 w-full relative z-10">
       <div class="max-w-3xl">
         <p class="enter e1 text-moss text-xs font-body font-medium tracking-[0.2em] uppercase mb-8">
           Certificeret Psykoterapeut · MPF · Online i hele Danmark
@@ -403,9 +412,6 @@
             <line x1="72" y1="12" x2="120" y2="12" stroke="rgba(74,117,88,0.4)" stroke-width="0.8"/>
           </svg>
         </div>
-        <p class="mt-10 text-sm font-body" style="color: rgba(196,216,204,0.5); line-height: 1.85; font-weight: 300; max-width: 520px; margin-left: auto; margin-right: auto;">
-          Jeg arbejder ud fra psykodynamisk teori, kognitiv terapi og traumeinformerede metoder — altid tilpasset dig og din unikke situation.
-        </p>
       </div>
     </div>
   </section>
@@ -498,8 +504,9 @@
               src="https://placehold.co/480x580/C4D8CC/4A7558?text=Foto"
               alt="Sara Kjær"
               class="w-full object-cover"
-              style="aspect-ratio: 4/5; filter: sepia(0.1) contrast(1.04);"
+              style="aspect-ratio: 4/5; filter: sepia(0.12) contrast(1.05);"
             >
+            <div class="photo-overlay"></div>
           </div>
         </div>
       </div>
@@ -546,17 +553,17 @@
         <div class="emerge">
           <span class="testimony-mark" aria-hidden="true">"</span>
           <p class="testimony-body mb-6">For første gang i lang tid følte jeg mig set — ikke som et problem der skulle løses, men som et menneske der fortjente ro.</p>
-          <p style="font-size: 0.78rem; color: rgba(55,74,52,0.5); letter-spacing: 0.05em;">— A.B., 33 år · individuel terapi</p>
+          <p style="font-size: 0.78rem; color: rgba(55,74,52,0.75); letter-spacing: 0.05em;">— A.B., 33 år · individuel terapi</p>
         </div>
         <div class="emerge ed1">
           <span class="testimony-mark" aria-hidden="true">"</span>
           <p class="testimony-body mb-6">Sara hjalp os med at finde sproget igen — til hinanden og til os selv. Vi kom styrket ud af det, vi troede ville knuse os.</p>
-          <p style="font-size: 0.78rem; color: rgba(55,74,52,0.5); letter-spacing: 0.05em;">— K. &amp; J.N., 41 og 38 år · parterapi</p>
+          <p style="font-size: 0.78rem; color: rgba(55,74,52,0.75); letter-spacing: 0.05em;">— K. &amp; J.N., 41 og 38 år · parterapi</p>
         </div>
         <div class="emerge ed2">
           <span class="testimony-mark" aria-hidden="true">"</span>
           <p class="testimony-body mb-6">Det, der overraskede mig mest, var hvor stille det hele var. Intet pres. Bare rum til at lade tingene folde sig ud i mit eget tempo.</p>
-          <p style="font-size: 0.78rem; color: rgba(55,74,52,0.5); letter-spacing: 0.05em;">— M.O., 47 år · traumeterapi</p>
+          <p style="font-size: 0.78rem; color: rgba(55,74,52,0.75); letter-spacing: 0.05em;">— M.O., 47 år · traumeterapi</p>
         </div>
       </div>
     </div>
@@ -664,7 +671,7 @@
       <div class="emerge">
         <p class="text-moss text-xs font-medium tracking-[0.2em] uppercase mb-4">Kontakt</p>
         <h2 class="font-display text-4xl lg:text-5xl mb-6" style="letter-spacing: -0.025em; line-height: 1.05; color: rgba(237,229,212,0.92);">
-          Første skridt er<br>det sværeste
+          Ræk ud —<br>jeg er her
         </h2>
         <p class="mb-10 font-light" style="line-height: 1.9; color: rgba(196,216,204,0.65);">
           Du behøver ikke have styr på, hvad du vil sige. Skriv til mig, og vi finder ud af resten. Jeg svarer inden for ét hverdagsdøgn.
@@ -713,18 +720,18 @@
         <form id="mixForm" class="space-y-5">
           <div class="grid sm:grid-cols-2 gap-5">
             <div>
-              <label for="mNavn" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.45); letter-spacing: 0.1em;">Navn</label>
+              <label for="mNavn" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.72); letter-spacing: 0.1em;">Navn</label>
               <input id="mNavn" type="text" placeholder="Dit navn" class="input-field w-full px-4 py-3 text-forest text-sm">
               <p id="mFejlNavn" class="field-err-msg">Skriv venligst dit navn</p>
             </div>
             <div>
-              <label for="mEmail" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.45); letter-spacing: 0.1em;">E-mail</label>
+              <label for="mEmail" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.72); letter-spacing: 0.1em;">E-mail</label>
               <input id="mEmail" type="email" placeholder="din@email.dk" class="input-field w-full px-4 py-3 text-forest text-sm">
               <p id="mFejlEmail" class="field-err-msg">Skriv en gyldig e-mailadresse</p>
             </div>
           </div>
           <div>
-            <label for="mYdelse" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.45); letter-spacing: 0.1em;">Hvad søger du hjælp til?</label>
+            <label for="mYdelse" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.72); letter-spacing: 0.1em;">Hvad søger du hjælp til?</label>
             <select id="mYdelse" class="input-field w-full px-4 py-3 text-forest text-sm appearance-none">
               <option value="">Vælg ydelse</option>
               <option>Individuel terapi</option>
@@ -734,7 +741,7 @@
             </select>
           </div>
           <div>
-            <label for="mBesked" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.45); letter-spacing: 0.1em;">Din besked</label>
+            <label for="mBesked" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.72); letter-spacing: 0.1em;">Din besked</label>
             <textarea id="mBesked" rows="4" placeholder="Fortæl kort hvad der bringer dig hertil — eller bare at du gerne vil booke." class="input-field w-full px-4 py-3 text-forest text-sm resize-none"></textarea>
             <p id="mFejlBesked" class="field-err-msg">Skriv en kort besked</p>
           </div>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Email – plainsite</title>
+  <!--[if mso]>
+  <noscript>
+    <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
+  </noscript>
+  <![endif]-->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { margin: 0; padding: 0; background-color: #EDE8E0; font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
+    table { border-collapse: collapse; }
+    a { color: #0A6B46; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .email-wrapper { background-color: #EDE8E0; padding: 40px 20px; }
+    .email-container { max-width: 600px; margin: 0 auto; }
+
+    /* Header */
+    .header { background-color: #18161E; border-radius: 12px 12px 0 0; padding: 28px 40px; }
+    .logo-mark { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 32px; height: 32px; background: #F5F1EC; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-family: monospace; font-size: 11px; font-weight: 700; color: #18161E; line-height: 1; }
+    .logo-name { font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; color: #F5F1EC; letter-spacing: -0.02em; }
+
+    /* Body */
+    .body { background-color: #FFFFFF; padding: 48px 40px; }
+    .greeting { font-size: 22px; font-weight: 700; color: #18161E; letter-spacing: -0.03em; margin-bottom: 20px; line-height: 1.2; }
+    .text { font-size: 15px; color: #4A4555; line-height: 1.75; margin-bottom: 20px; }
+    .text:last-of-type { margin-bottom: 0; }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid #EDE8E0; margin: 32px 0; }
+
+    /* CTA Button */
+    .btn-wrap { margin: 32px 0; }
+    .btn { display: inline-block; background-color: #0A6B46; color: #ffffff !important; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; text-decoration: none !important; padding: 14px 28px; border-radius: 6px; letter-spacing: -0.01em; }
+
+    /* Info box */
+    .info-box { background-color: #F5F1EC; border-left: 3px solid #0A6B46; border-radius: 0 6px 6px 0; padding: 16px 20px; margin: 28px 0; }
+    .info-box p { font-size: 14px; color: #2C2830; line-height: 1.6; margin: 0; }
+
+    /* Signature */
+    .signature { margin-top: 32px; }
+    .sig-name { font-size: 15px; font-weight: 600; color: #18161E; margin-bottom: 2px; }
+    .sig-title { font-size: 13px; color: #4A4555; margin-bottom: 2px; }
+    .sig-brand { font-size: 13px; color: #0A6B46; font-weight: 600; }
+
+    /* Footer */
+    .footer { background-color: #18161E; border-radius: 0 0 12px 12px; padding: 24px 40px; }
+    .footer-text { font-size: 12px; color: rgba(245, 241, 236, 0.45); line-height: 1.6; text-align: center; }
+    .footer-text a { color: rgba(245, 241, 236, 0.65); text-decoration: underline; }
+    .footer-links { text-align: center; margin-bottom: 12px; }
+    .footer-links a { font-size: 12px; color: rgba(245, 241, 236, 0.65); margin: 0 10px; text-decoration: none; }
+    .footer-links a:hover { color: #8ECFB7; }
+
+    /* Mobile */
+    @media only screen and (max-width: 480px) {
+      .header, .body, .footer { padding-left: 24px !important; padding-right: 24px !important; }
+      .greeting { font-size: 20px !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="email-wrapper">
+  <div class="email-container">
+
+    <!-- ── HEADER ── -->
+    <div class="header">
+      <a href="https://plainsite.dk" class="logo-mark">
+        <span class="logo-icon">&lt;/&gt;</span>
+        <span class="logo-name">plainsite</span>
+      </a>
+    </div>
+
+    <!-- ── BODY ── -->
+    <div class="body">
+
+      <!-- Hilsen -->
+      <p class="greeting">Hej [Navn] 👋</p>
+
+      <!-- Brødtekst -->
+      <p class="text">
+        Skriv din besked her. Hold sproget venligt og direkte — som du ville tale til en ny klient.
+        Du kan skrive flere afsnit ved at kopiere denne blok.
+      </p>
+
+      <p class="text">
+        Hvis du vil fremhæve noget vigtigt, kan du bruge info-boksen herunder eller en knap til at
+        sende modtageren videre.
+      </p>
+
+      <!-- Info-boks (valgfri — slet hvis ikke nødvendig) -->
+      <div class="info-box">
+        <p>Fx: Din hjemmeside er nu live på <strong>dinside.dk</strong>. Log ind i dit dashboard for at se statistik og sende os feedback.</p>
+      </div>
+
+      <!-- CTA-knap (valgfri) -->
+      <div class="btn-wrap">
+        <a href="https://plainsite.dk" class="btn">Se din hjemmeside →</a>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Signatur -->
+      <div class="signature">
+        <p class="sig-name">Tobias</p>
+        <p class="sig-title">Grundlægger &amp; webudvikler</p>
+        <p class="sig-brand">plainsite</p>
+      </div>
+
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <div class="footer">
+      <div class="footer-links">
+        <a href="https://plainsite.dk">plainsite.dk</a>
+        <a href="mailto:hej@plainsite.dk">hej@plainsite.dk</a>
+        <a href="https://plainsite.dk/vilkaar.html">Vilkår</a>
+      </div>
+      <p class="footer-text">
+        Du modtager denne mail fordi du er kunde hos plainsite.<br>
+        plainsite · CVR: XXXXXXXX · Danmark
+      </p>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

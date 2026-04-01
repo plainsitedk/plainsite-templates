@@ -1,0 +1,5 @@
+memory/
+temporary screenshots/
+*.mjs
+node_modules/
+.DS_Store

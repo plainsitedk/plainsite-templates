@@ -10,24 +10,26 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            stone: '#F5F3EF',
-            'stone-dark': '#EAE6DF',
-            forest: '#1D2420',
-            'forest-soft': '#4A5448',
-            sage: '#7B9E87',
-            'sage-pale': '#D4E5DA',
-            warm: '#C9B59A',
+            parch: '#EDE5D4',
+            'parch-mid': '#E0D4BF',
+            'parch-dark': '#D2C4AC',
+            forest: '#141A12',
+            'forest-soft': '#374A34',
+            moss: '#4A7558',
+            'moss-pale': '#C4D8CC',
+            gold: '#8C6832',
+            abyss: '#0E1710',
           },
           fontFamily: {
-            display: ['"Playfair Display"', 'serif'],
-            body: ['Outfit', 'sans-serif'],
+            display: ['"Cormorant Garamond"', 'serif'],
+            body: ['"DM Sans"', 'sans-serif'],
           },
         }
       }
@@ -37,574 +39,693 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Outfit', sans-serif; background: #F5F3EF; color: #1D2420; }
+    body { font-family: 'DM Sans', sans-serif; background: #EDE5D4; color: #141A12; }
 
-    /* Entrance animations */
-    .enter { animation: enterUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; }
-    .enter-1 { animation-delay: 0.1s; }
-    .enter-2 { animation-delay: 0.3s; }
-    .enter-3 { animation-delay: 0.5s; }
-    .enter-4 { animation-delay: 0.7s; }
-    .enter-5 { animation-delay: 0.9s; }
-    @keyframes enterUp {
-      from { opacity: 0; transform: translateY(18px); }
+    /* ─── Grain overlay ─── */
+    .grain {
+      position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+      opacity: 0.042; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ─── Enter animations ─── */
+    .enter { animation: riseUp 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; }
+    .e1 { animation-delay: 0.05s; } .e2 { animation-delay: 0.22s; }
+    .e3 { animation-delay: 0.42s; } .e4 { animation-delay: 0.62s; }
+    .e5 { animation-delay: 0.82s; }
+    @keyframes riseUp {
+      from { opacity: 0; transform: translateY(22px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Scroll reveal — bidirektionel */
+    /* ─── Scroll emerge ─── */
     .emerge {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
-                  transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0; transform: translateY(26px);
+      transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .emerge.visible { opacity: 1; transform: translateY(0); }
-    .emerge.above   { opacity: 0; transform: translateY(-16px); }
-    .emerge-d1 { transition-delay: 0.12s; }
-    .emerge-d2 { transition-delay: 0.24s; }
-    .emerge-d3 { transition-delay: 0.36s; }
+    .emerge.above   { opacity: 0; transform: translateY(-14px); }
+    .ed1 { transition-delay: 0.1s; }
+    .ed2 { transition-delay: 0.22s; }
+    .ed3 { transition-delay: 0.34s; }
 
-    /* Form feedback */
+    /* ─── Nav ─── */
+    .nav-blur {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(237, 229, 212, 0.88);
+      border-bottom: 1px solid rgba(74, 117, 88, 0.1);
+    }
+    .nav-link { color: #374A34; font-size: 0.875rem; transition: color 0.2s ease; }
+    .nav-link:hover { color: #4A7558; }
+
+    /* ─── Buttons ─── */
+    .btn-moss {
+      background: #4A7558; color: #EDE5D4;
+      transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+      box-shadow: 0 2px 16px rgba(74, 117, 88, 0.28);
+    }
+    .btn-moss:hover { background: #3A5E47; transform: translateY(-1px); box-shadow: 0 4px 24px rgba(74, 117, 88, 0.38); }
+    .btn-moss:active { transform: translateY(0); }
+    .btn-moss:focus-visible { outline: 2px solid #4A7558; outline-offset: 3px; }
+    .btn-moss.loading { pointer-events: none; opacity: 0.7; }
+    .btn-moss .btn-label { transition: opacity 0.2s; }
+    .btn-moss .btn-spinner { display: none; }
+    .btn-moss.loading .btn-label { opacity: 0; }
+    .btn-moss.loading .btn-spinner { display: inline-flex; }
+
+    .btn-outline-moss {
+      border: 1.5px solid #4A7558; color: #4A7558;
+      transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
+    }
+    .btn-outline-moss:hover { background: #4A7558; color: #EDE5D4; transform: translateY(-1px); }
+    .btn-outline-moss:active { transform: translateY(0); }
+    .btn-outline-moss:focus-visible { outline: 2px solid #4A7558; outline-offset: 3px; }
+
+    /* ─── Hero ─── */
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4.5rem, 11vw, 10rem);
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      line-height: 0.92;
+      color: #141A12;
+    }
+
+    /* ─── Botanical ornament ─── */
+    .botanical-divider {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1rem; margin: 0 auto;
+    }
+    .botanical-divider::before,
+    .botanical-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(74, 117, 88, 0.3), transparent);
+    }
+
+    /* ─── Dark abyss sections ─── */
+    .abyss-section { background: #0E1710; }
+    .star-field {
+      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+    }
+    .star {
+      position: absolute; background: rgba(196, 216, 204, 0.5);
+      border-radius: 50%;
+    }
+
+    /* ─── Photo arch ─── */
+    .photo-arch {
+      clip-path: ellipse(50% 55% at 50% 45%);
+      overflow: hidden;
+    }
+    .photo-arch-outer {
+      position: relative;
+    }
+    .photo-arch-outer::before {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      border-radius: 50% 50% 46% 54% / 54% 50% 50% 46%;
+      border: 1px solid rgba(74, 117, 88, 0.2);
+      z-index: 0;
+    }
+    .photo-arch-outer::after {
+      content: '';
+      position: absolute;
+      inset: -40px;
+      border-radius: 52% 48% 44% 56% / 48% 54% 46% 52%;
+      border: 1px solid rgba(140, 104, 50, 0.12);
+      z-index: 0;
+    }
+
+    /* ─── Testimony ─── */
+    .testimony-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 6rem; line-height: 0.6;
+      color: rgba(74, 117, 88, 0.25);
+      display: block; margin-bottom: 1.25rem;
+    }
+    .testimony-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.15rem, 2vw, 1.4rem);
+      font-style: italic; font-weight: 400;
+      color: #141A12;
+      letter-spacing: -0.01em; line-height: 1.65;
+    }
+
+    /* ─── Service ceremony ─── */
+    .rite-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 300; line-height: 1;
+      color: rgba(74, 117, 88, 0.18);
+      letter-spacing: -0.04em;
+      flex-shrink: 0; user-select: none;
+    }
+    .rite-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 400; letter-spacing: -0.025em; line-height: 1.05;
+      color: #141A12;
+    }
+    .rite-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: #4A7558; font-size: 0.875rem; font-weight: 500;
+      white-space: nowrap;
+      transition: gap 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.2s;
+    }
+    .rite-link:hover { gap: 12px; opacity: 0.75; }
+
+    /* ─── Pull quote ─── */
+    .pull-quote {
+      border-left: 2px solid rgba(74, 117, 88, 0.5);
+      padding-left: 1.5rem;
+    }
+    .pull-quote p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+      font-style: italic; font-weight: 400;
+      color: #141A12;
+      letter-spacing: -0.01em; line-height: 1.5;
+    }
+
+    /* ─── Badge ─── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.3rem 0.85rem;
+      background: rgba(74, 117, 88, 0.08);
+      border: 1px solid rgba(74, 117, 88, 0.2);
+      font-size: 0.7rem; font-weight: 500;
+      color: #3A5E47; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    /* ─── Pricing rows ─── */
+    .price-row-line { border-color: rgba(74, 117, 88, 0.15); }
+
+    /* ─── Form ─── */
+    .input-field {
+      border: 1px solid rgba(74, 117, 88, 0.2);
+      background: rgba(255, 255, 255, 0.45);
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: #4A7558;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 0 0 3px rgba(74, 117, 88, 0.1);
+    }
     .field-err-msg {
-      font-size: 0.75rem; color: #7B9E87;
-      margin-top: 0.35rem; opacity: 0;
-      transform: translateY(-4px);
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      font-size: 0.75rem; color: #4A7558; margin-top: 0.35rem;
+      opacity: 0; transform: translateY(-4px);
+      transition: opacity 0.2s, transform 0.2s;
     }
     .field-err-msg.visible { opacity: 1; transform: translateY(0); }
-    .input-field.field-error { border-color: #7B9E87 !important; }
+    .input-field.field-error { border-color: #4A7558 !important; }
+
+    /* ─── Form success ─── */
     #formSuccessMix { display: none; text-align: center; padding: 3rem 0; }
     #formSuccessMix.visible { display: block; }
     .success-icon-mix {
       width: 52px; height: 52px; border-radius: 50%;
-      border: 1.5px solid #7B9E87;
+      border: 1.5px solid #4A7558;
       display: inline-flex; align-items: center; justify-content: center;
       margin-bottom: 1.5rem;
-      animation: enterUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-    .btn-sage.loading { pointer-events: none; opacity: 0.7; }
-    .btn-sage .btn-label { transition: opacity 0.2s ease; }
-    .btn-sage .btn-spinner { display: none; }
-    .btn-sage.loading .btn-label { opacity: 0; }
-    .btn-sage.loading .btn-spinner { display: inline-block; }
-
-    /* Nav */
-    .nav-stuck {
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      background: rgba(245, 243, 239, 0.9);
-      border-bottom: 1px solid rgba(123, 158, 135, 0.12);
-    }
-    .nav-link {
-      color: #4A5448;
-      font-size: 0.875rem;
-      font-weight: 400;
-      letter-spacing: 0.01em;
-      transition: color 0.2s ease;
-    }
-    .nav-link:hover { color: #7B9E87; }
-
-    /* Buttons */
-    .btn-sage {
-      background: #7B9E87;
-      color: #F5F3EF;
-      transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
-      box-shadow: 0 2px 14px rgba(123, 158, 135, 0.3);
-    }
-    .btn-sage:hover { background: #6A8E76; transform: translateY(-1px); box-shadow: 0 4px 22px rgba(123, 158, 135, 0.4); }
-    .btn-sage:active { transform: translateY(0); }
-    .btn-sage:focus-visible { outline: 2px solid #7B9E87; outline-offset: 3px; }
-
-    .btn-outline-sage {
-      border: 1.5px solid #7B9E87;
-      color: #7B9E87;
-      transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
-    }
-    .btn-outline-sage:hover { background: #7B9E87; color: #F5F3EF; transform: translateY(-1px); }
-    .btn-outline-sage:active { transform: translateY(0); }
-    .btn-outline-sage:focus-visible { outline: 2px solid #7B9E87; outline-offset: 3px; }
-
-    /* Hero background organic shape */
-    .hero-shape {
-      position: absolute;
-      border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
-      background: linear-gradient(135deg, rgba(212, 229, 218, 0.6), rgba(201, 181, 154, 0.2));
-      z-index: 0;
+      animation: riseUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    /* Photo treatment */
-    .photo-wrap {
-      position: relative;
-      border-radius: 48% 52% 44% 56% / 52% 44% 56% 48%;
-      overflow: hidden;
+    /* ─── Mobile menu ─── */
+    .mobile-menu {
+      transform: translateY(-10px); opacity: 0; pointer-events: none;
+      transition: transform 0.3s ease, opacity 0.3s ease;
     }
-    .photo-wrap::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom right, rgba(123, 158, 135, 0.15), transparent 60%);
-      mix-blend-mode: multiply;
-    }
+    .mobile-menu.open { transform: translateY(0); opacity: 1; pointer-events: all; }
 
-    /* Credential badge */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.35rem 0.85rem;
-      background: rgba(123, 158, 135, 0.1);
-      border: 1px solid rgba(123, 158, 135, 0.25);
-      border-radius: 100px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: #4A7558;
-      letter-spacing: 0.03em;
-    }
-    .badge::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #7B9E87;
-      flex-shrink: 0;
-    }
-
-    /* Philosophy pull quote */
-    .pull-quote {
-      border-left: 3px solid #7B9E87;
-      padding-left: 1.5rem;
-    }
-
-    /* Service row */
-    .service-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      border-top: 1px solid rgba(123, 158, 135, 0.2);
-      transition: background 0.3s ease;
-      cursor: default;
-    }
-    .service-row:hover { background: rgba(123, 158, 135, 0.04); }
-    @media (min-width: 768px) {
-      .service-row { grid-template-columns: 1fr 2fr auto; align-items: center; }
-    }
-
-    /* Pricing */
-    .price-panel {
-      border: 1.5px solid transparent;
-      transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
-    }
-    .price-panel:hover {
-      border-color: rgba(123, 158, 135, 0.35);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px -10px rgba(123, 158, 135, 0.2);
-    }
-    .price-panel.featured {
-      border-color: #7B9E87;
-      background: linear-gradient(135deg, rgba(212, 229, 218, 0.3), rgba(245, 243, 239, 0.9));
-    }
-
-    /* Form */
-    .input-field {
-      border: 1px solid rgba(123, 158, 135, 0.2);
-      background: rgba(255, 255, 255, 0.5);
-      transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-    }
-    .input-field:focus {
-      outline: none;
-      border-color: #7B9E87;
-      background: rgba(255, 255, 255, 0.8);
-      box-shadow: 0 0 0 3px rgba(123, 158, 135, 0.1);
-    }
-
-    /* FAQ */
-    .faq-row { border-top: 1px solid rgba(123, 158, 135, 0.15); }
-    .faq-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    /* ─── FAQ ─── */
+    .faq-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
     .faq-body.open { grid-template-rows: 1fr; }
     .faq-inner { overflow: hidden; }
-    .faq-plus { transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+    .faq-plus { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
     .faq-active .faq-plus { transform: rotate(45deg); }
   </style>
 </head>
 
 <body class="font-body">
 
+  <div class="grain" aria-hidden="true"></div>
+
   <!-- NAVIGATION -->
-  <nav class="nav-stuck fixed top-0 left-0 right-0 z-50">
+  <nav class="nav-blur fixed top-0 left-0 right-0 z-50">
     <div class="max-w-6xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="#" class="font-display text-xl text-forest" style="letter-spacing: -0.02em;">
-        Sara Kjær
-        <span class="font-body font-light text-forest-soft text-sm ml-1">MPF</span>
+        Sara Kjær <span class="font-body font-light text-forest-soft text-sm ml-1">MPF</span>
       </a>
-
       <div class="hidden md:flex items-center gap-7">
         <a href="#ydelser" class="nav-link">Ydelser</a>
         <a href="#om" class="nav-link">Om mig</a>
         <a href="#tilgang" class="nav-link">Min tilgang</a>
         <a href="#priser" class="nav-link">Priser</a>
-        <a href="#kontakt" class="btn-sage px-5 py-2 text-sm font-medium rounded-sm">tag kontakt</a>
+        <a href="#kontakt" class="btn-moss px-5 py-2 text-sm font-medium">book gratis samtale</a>
       </div>
-
-      <button id="mBtn" class="md:hidden p-1 text-forest-soft" aria-label="Menu">
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5">
-          <line id="l1" x1="2" y1="6" x2="20" y2="6" /><line id="l2" x1="2" y1="11" x2="20" y2="11" /><line id="l3" x1="2" y1="16" x2="20" y2="16" />
-        </svg>
+      <button id="mBtn" class="md:hidden flex flex-col gap-1.5 p-1" aria-label="Menu">
+        <span class="w-6 h-px bg-forest block transition-transform duration-300" id="mb1"></span>
+        <span class="w-6 h-px bg-forest block transition-opacity duration-300" id="mb2"></span>
+        <span class="w-6 h-px bg-forest block transition-transform duration-300" id="mb3"></span>
       </button>
+    </div>
+    <div id="mobileMenu" class="mobile-menu md:hidden bg-parch border-t border-moss/10">
+      <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col gap-5">
+        <a href="#ydelser" class="nav-link text-base" onclick="closeMob()">Ydelser</a>
+        <a href="#om" class="nav-link text-base" onclick="closeMob()">Om mig</a>
+        <a href="#tilgang" class="nav-link text-base" onclick="closeMob()">Min tilgang</a>
+        <a href="#priser" class="nav-link text-base" onclick="closeMob()">Priser</a>
+        <a href="#kontakt" class="btn-moss px-5 py-2.5 text-sm font-medium text-center" onclick="closeMob()">book gratis samtale</a>
+      </div>
     </div>
   </nav>
 
-  <!-- Mobile nav -->
-  <div id="mNav" class="hidden fixed top-16 left-0 right-0 z-40 bg-stone border-b border-sage/10 px-6 py-5 space-y-4 md:hidden shadow-lg">
-    <a href="#ydelser" class="block nav-link text-base py-1" onclick="document.getElementById('mNav').classList.add('hidden')">Ydelser</a>
-    <a href="#om" class="block nav-link text-base py-1" onclick="document.getElementById('mNav').classList.add('hidden')">Om mig</a>
-    <a href="#tilgang" class="block nav-link text-base py-1" onclick="document.getElementById('mNav').classList.add('hidden')">Min tilgang</a>
-    <a href="#priser" class="block nav-link text-base py-1" onclick="document.getElementById('mNav').classList.add('hidden')">Priser</a>
-    <a href="#kontakt" class="btn-sage block text-center px-5 py-2.5 text-sm font-medium rounded-sm" onclick="document.getElementById('mNav').classList.add('hidden')">tag kontakt</a>
-  </div>
+  <!-- ════════════════════════════════════════ HERO ════ -->
+  <section class="relative min-h-screen flex items-center overflow-hidden pt-16">
 
-  <!-- HERO -->
-  <section class="relative overflow-hidden pt-28 pb-20 lg:pt-36 lg:pb-32 px-6 lg:px-8">
-    <!-- Geometric decoration -->
-    <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-      <svg class="absolute" style="top: -15vh; right: -5vw; width: 55vw; max-width: 620px; min-width: 280px;" viewBox="0 0 500 500" fill="none">
-        <circle cx="250" cy="250" r="236" stroke="#7B9E87" stroke-width="0.8" opacity="0.12"/>
-        <circle cx="250" cy="250" r="165" stroke="#C9B59A" stroke-width="0.5" opacity="0.08"/>
+    <!-- Concentric ring decoration — top right -->
+    <div class="absolute pointer-events-none" style="top: -8vh; right: -8vw; width: 55vw; max-width: 580px; opacity: 1;" aria-hidden="true">
+      <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="280" cy="220" r="220" stroke="#4A7558" stroke-width="0.7" opacity="0.13"/>
+        <circle cx="280" cy="220" r="175" stroke="#4A7558" stroke-width="0.5" opacity="0.09"/>
+        <circle cx="280" cy="220" r="130" stroke="#8C6832" stroke-width="0.5" opacity="0.08"/>
+        <circle cx="280" cy="220" r="88"  stroke="#4A7558" stroke-width="0.4" opacity="0.07"/>
+        <circle cx="280" cy="220" r="50"  stroke="#8C6832" stroke-width="0.4" opacity="0.06"/>
+        <!-- Cardinal marks -->
+        <line x1="280" y1="-2"  x2="280" y2="14"  stroke="#4A7558" stroke-width="0.7" opacity="0.2"/>
+        <line x1="280" y1="426" x2="280" y2="442" stroke="#4A7558" stroke-width="0.7" opacity="0.2"/>
+        <line x1="58"  y1="220" x2="74"  y2="220" stroke="#4A7558" stroke-width="0.7" opacity="0.2"/>
+        <line x1="486" y1="220" x2="502" y2="220" stroke="#4A7558" stroke-width="0.7" opacity="0.2"/>
+        <!-- Diagonal botanical marks -->
+        <path d="M124 76 L134 86" stroke="#8C6832" stroke-width="0.7" opacity="0.18"/>
+        <path d="M424 76 L414 86" stroke="#8C6832" stroke-width="0.7" opacity="0.18"/>
+        <path d="M124 364 L134 354" stroke="#8C6832" stroke-width="0.7" opacity="0.18"/>
+        <path d="M424 364 L414 354" stroke="#8C6832" stroke-width="0.7" opacity="0.18"/>
+        <!-- Small diamonds at cardinal intersections -->
+        <rect x="276" y="216" width="8" height="8" transform="rotate(45 280 220)" fill="none" stroke="#4A7558" stroke-width="0.5" opacity="0.18"/>
       </svg>
     </div>
 
-    <div class="max-w-6xl mx-auto relative z-10">
-      <div class="grid lg:grid-cols-12 gap-10 items-center">
+    <!-- Bottom-left botanical -->
+    <div class="absolute pointer-events-none hidden lg:block" style="bottom: 4vh; left: -2vw; width: 20vw; max-width: 200px; opacity: 0.07;" aria-hidden="true">
+      <svg viewBox="0 0 180 240" fill="none">
+        <path d="M90 230 C88 190 85 160 90 130 C95 100 88 70 92 30" stroke="#4A7558" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M91 175 C110 160 130 142 145 120" stroke="#4A7558" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M130 130 C125 112 132 98 148 116 C155 130 138 143 130 130Z" fill="#4A7558"/>
+        <path d="M145 120 C140 102 147 88 163 106" fill="#4A7558" opacity="0.7"/>
+        <path d="M91 145 C72 130 55 115 42 95" stroke="#4A7558" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M55 103 C50 86 42 75 30 90 C20 104 38 118 55 103Z" fill="#4A7558"/>
+        <path d="M91 110 C108 96 126 82 138 62" stroke="#4A7558" stroke-width="1.1" stroke-linecap="round"/>
+        <path d="M120 72 C116 55 123 42 137 58 C143 72 128 84 120 72Z" fill="#4A7558"/>
+        <path d="M91 80 C74 66 58 50 48 32" stroke="#4A7558" stroke-width="1" stroke-linecap="round"/>
+        <path d="M60 40 C56 24 48 14 36 28 C27 41 44 54 60 40Z" fill="#4A7558"/>
+      </svg>
+    </div>
 
-        <!-- Left col: 7 -->
-        <div class="lg:col-span-7">
-          <!-- Greeting + credentials -->
-          <div class="enter enter-1 flex flex-wrap items-center gap-3 mb-8">
-            <span class="badge">MPF-certificeret psykoterapeut</span>
-            <span class="badge">10+ års erfaring</span>
-          </div>
+    <!-- Hero content -->
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 w-full py-24 relative z-10">
+      <div class="max-w-3xl">
+        <p class="enter e1 text-moss text-xs font-body font-medium tracking-[0.2em] uppercase mb-8">
+          Certificeret Psykoterapeut · MPF · Online i hele Danmark
+        </p>
 
-          <h1 class="enter enter-2 font-display text-5xl lg:text-6xl xl:text-7xl text-forest mb-4" style="letter-spacing: -0.03em; line-height: 1.02;">
-            Hej, jeg er Sara
-          </h1>
-          <p class="enter enter-3 font-display text-2xl lg:text-3xl text-forest-soft italic mb-8" style="letter-spacing: -0.01em; line-height: 1.35;">
-            — og jeg er her for at hjælpe dig
-          </p>
+        <h1 class="enter e2 hero-name mb-2">
+          Sara<br>Kjær
+        </h1>
 
-          <p class="enter enter-4 text-forest-soft text-lg max-w-lg mb-10" style="line-height: 1.8; font-weight: 300;">
-            Angst, depression, relationelle vanskeligheder eller bare en fornemmelse af, at noget ikke stemmer. Du behøver ikke have alle svarene. Det er nok at tage det første skridt.
-          </p>
+        <p class="enter e3 font-display text-2xl lg:text-3xl text-forest-soft italic mb-10 mt-6" style="letter-spacing: -0.01em; line-height: 1.3; max-width: 520px;">
+          — et rum til at finde tilbage til dig selv
+        </p>
 
-          <div class="enter enter-5 flex flex-col sm:flex-row gap-4">
-            <a href="#kontakt" class="btn-sage px-8 py-3.5 text-sm font-medium rounded-sm text-center">tag kontakt · første samtale er gratis</a>
-          </div>
+        <p class="enter e4 text-forest-soft max-w-lg mb-12" style="line-height: 1.85; font-weight: 300; font-size: 1.05rem;">
+          Angst, depression, relationelle vanskeligheder eller bare en fornemmelse af, at noget ikke stemmer. Du behøver ikke have alle svarene for at tage det første skridt.
+        </p>
+
+        <div class="enter e5 flex flex-col sm:flex-row gap-4">
+          <a href="#kontakt" class="btn-moss px-8 py-4 text-sm font-medium text-center">book gratis opstartssamtale</a>
+          <a href="#om" class="btn-outline-moss px-8 py-4 text-sm font-medium text-center">læs mere om mig</a>
         </div>
+      </div>
+    </div>
 
-        <!-- Right col: 5 (photo) -->
-        <div class="enter enter-3 lg:col-span-5 flex justify-center lg:justify-end">
-          <div class="relative">
-            <div class="photo-wrap w-64 h-72 lg:w-72 lg:h-80 xl:w-80 xl:h-96">
-              <img
-                src="https://placehold.co/480x580/D4E5DA/7B9E87?text=Foto"
-                alt="Sara Kjær"
-                class="w-full h-full object-cover"
-              >
+    <!-- Bottom fade -->
+    <div class="absolute bottom-0 left-0 right-0 h-24 pointer-events-none" style="background: linear-gradient(to bottom, transparent, #EDE5D4);" aria-hidden="true"></div>
+  </section>
+
+  <!-- ════════════════════════════════════════ MANTRA ════ -->
+  <section id="tilgang" class="abyss-section relative overflow-hidden py-28 lg:py-40 px-6 lg:px-8">
+
+    <!-- Star field -->
+    <div class="star-field" aria-hidden="true" id="starField"></div>
+
+    <!-- Radial glow -->
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(74,117,88,0.08) 0%, transparent 70%);" aria-hidden="true"></div>
+
+    <div class="max-w-4xl mx-auto relative z-10 text-center">
+      <div class="emerge">
+        <p class="text-moss text-xs font-body font-medium tracking-[0.2em] uppercase mb-10">Min tilgang</p>
+        <blockquote>
+          <p class="font-display text-stone/90 italic" style="font-size: clamp(1.75rem, 4vw, 3.25rem); letter-spacing: -0.02em; line-height: 1.35; color: rgba(237,229,212,0.88);">
+            "En terapeut er ikke der for at fortælle dig, hvad du skal gøre. Jeg er der for at hjælpe dig med at høre dig selv bedre."
+          </p>
+        </blockquote>
+        <div class="mt-14 flex justify-center">
+          <svg width="120" height="24" viewBox="0 0 120 24" fill="none" aria-hidden="true">
+            <line x1="0" y1="12" x2="48" y2="12" stroke="rgba(74,117,88,0.4)" stroke-width="0.8"/>
+            <rect x="56" y="8" width="8" height="8" transform="rotate(45 60 12)" fill="none" stroke="rgba(74,117,88,0.5)" stroke-width="0.8"/>
+            <line x1="72" y1="12" x2="120" y2="12" stroke="rgba(74,117,88,0.4)" stroke-width="0.8"/>
+          </svg>
+        </div>
+        <p class="mt-10 text-sm font-body" style="color: rgba(196,216,204,0.5); line-height: 1.85; font-weight: 300; max-width: 520px; margin-left: auto; margin-right: auto;">
+          Jeg arbejder ud fra psykodynamisk teori, kognitiv terapi og traumeinformerede metoder — altid tilpasset dig og din unikke situation.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ YDELSER ════ -->
+  <section id="ydelser" class="py-24 lg:py-32 px-6 lg:px-8 max-w-6xl mx-auto">
+    <div class="emerge mb-16">
+      <p class="text-moss text-xs font-medium tracking-[0.2em] uppercase mb-4">Ydelser</p>
+      <h2 class="font-display text-4xl lg:text-5xl text-forest" style="letter-spacing: -0.025em; line-height: 1.05;">Hvad jeg tilbyder</h2>
+    </div>
+
+    <div>
+      <!-- Rite 01 -->
+      <div class="emerge border-t py-12 lg:py-16" style="border-color: rgba(74,117,88,0.15);">
+        <div class="flex gap-6 lg:gap-12 items-start">
+          <span class="rite-num" aria-hidden="true">01</span>
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+              <div>
+                <h3 class="rite-heading mb-4">Individuel terapi</h3>
+                <p class="text-forest-soft text-sm max-w-xl" style="line-height: 1.9; font-weight: 300;">
+                  Et fortroligt rum til at arbejde med alt fra angst og depression til selvværd, livsovergange og relationer. Vi finder det tempo og den tilgang, der passer til netop dig.
+                </p>
+                <p class="text-moss text-xs font-medium tracking-widest uppercase mt-4">50 min · fra 950 kr</p>
+              </div>
+              <a href="#kontakt" class="rite-link flex-shrink-0">
+                book en samtale
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
             </div>
-            <!-- Floating credential tag -->
-            <div class="absolute -bottom-4 -left-6 bg-white/90 backdrop-blur-sm border border-sage/20 rounded-lg px-4 py-3 shadow-lg shadow-sage/10">
-              <p class="text-xs font-medium text-forest-soft uppercase tracking-wider">Online · Hele Danmark</p>
-              <p class="text-sm font-semibold text-forest mt-0.5">Første samtale gratis</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rite 02 -->
+      <div class="emerge ed1 border-t py-12 lg:py-16" style="border-color: rgba(74,117,88,0.15);">
+        <div class="flex gap-6 lg:gap-12 items-start">
+          <span class="rite-num" aria-hidden="true">02</span>
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+              <div>
+                <h3 class="rite-heading mb-4">Parterapi</h3>
+                <p class="text-forest-soft text-sm max-w-xl" style="line-height: 1.9; font-weight: 300;">
+                  For par der ønsker at styrke kommunikation, genopbygge tillid eller navigere en krise. Jeg arbejder med jer begge — og med jeres relation som helhed.
+                </p>
+                <p class="text-moss text-xs font-medium tracking-widest uppercase mt-4">80 min · fra 1.350 kr</p>
+              </div>
+              <a href="#kontakt" class="rite-link flex-shrink-0">
+                book en samtale
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
             </div>
           </div>
         </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FILOSOFI STRIP -->
-  <section id="tilgang" class="py-16 lg:py-20 px-6 lg:px-8" style="background: #1D2420;">
-    <div class="max-w-6xl mx-auto">
-      <div class="emerge grid lg:grid-cols-3 gap-10 items-start">
-        <div class="lg:col-span-1">
-          <p class="text-sage text-sm font-medium tracking-widest uppercase mb-3">Min tilgang</p>
-          <h2 class="font-display text-3xl text-stone" style="letter-spacing: -0.02em; line-height: 1.1;">
-            Terapi der tager dig alvorligt
-          </h2>
-        </div>
-        <div class="lg:col-span-2 pull-quote" style="border-left-color: #7B9E87;">
-          <p class="text-stone/80 text-lg" style="line-height: 1.85; font-weight: 300;">
-            Jeg arbejder ud fra en grundlæggende tro på, at du er eksperten på dit eget liv. Min faglighed kombinerer psykodynamisk teori, kognitiv terapi og traumeinformerede metoder — men altid tilpasset dig og din unikke situation.
-          </p>
-          <p class="text-stone/60 text-base mt-4" style="line-height: 1.8; font-weight: 300;">
-            En terapeut er ikke der for at fortælle dig, hvad du skal gøre. Jeg er der for at hjælpe dig med at høre dig selv bedre.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- YDELSER -->
-  <section id="ydelser" class="py-20 lg:py-28 px-6 lg:px-8 max-w-6xl mx-auto">
-    <div class="emerge mb-14">
-      <p class="text-sage text-sm font-medium tracking-widest uppercase mb-3">Ydelser</p>
-      <h2 class="font-display text-4xl lg:text-5xl text-forest" style="letter-spacing: -0.02em; line-height: 1.1;">Hvad jeg tilbyder</h2>
-    </div>
-
-    <div class="space-y-0">
-      <div class="service-row emerge py-7 px-4 gap-5 rounded-sm">
-        <div>
-          <h3 class="font-display text-2xl text-forest mb-1" style="letter-spacing: -0.01em;">Individuel terapi</h3>
-          <p class="text-sm text-sage font-medium">50 min · fra 950 kr</p>
-        </div>
-        <p class="text-forest-soft text-sm md:text-base mt-2 md:mt-0" style="line-height: 1.85; font-weight: 300;">
-          Et fortroligt rum til at arbejde med alt fra angst og depression til selvværd, livsovergange og relationer. Vi tilpasser tempoet og tilgangen til dig.
-        </p>
-        <div class="mt-3 md:mt-0 md:pl-6">
-          <a href="#kontakt" class="btn-outline-sage px-5 py-2 text-sm font-medium rounded-sm whitespace-nowrap inline-block">book</a>
-        </div>
       </div>
 
-      <div class="service-row emerge emerge-d1 py-7 px-4 gap-5 rounded-sm">
-        <div>
-          <h3 class="font-display text-2xl text-forest mb-1" style="letter-spacing: -0.01em;">Parterapi</h3>
-          <p class="text-sm text-sage font-medium">80 min · fra 1.350 kr</p>
-        </div>
-        <p class="text-forest-soft text-sm md:text-base mt-2 md:mt-0" style="line-height: 1.85; font-weight: 300;">
-          For par der ønsker at styrke kommunikation, genopbygge tillid eller navigere gennem en krise. Jeg arbejder med jer begge og med jeres relation som helhed.
-        </p>
-        <div class="mt-3 md:mt-0 md:pl-6">
-          <a href="#kontakt" class="btn-outline-sage px-5 py-2 text-sm font-medium rounded-sm whitespace-nowrap inline-block">book</a>
-        </div>
-      </div>
-
-      <div class="service-row emerge emerge-d2 py-7 px-4 gap-5 rounded-sm">
-        <div>
-          <h3 class="font-display text-2xl text-forest mb-1" style="letter-spacing: -0.01em;">Traumeterapi</h3>
-          <p class="text-sm text-sage font-medium">50 min · tilpasset forløb</p>
-        </div>
-        <p class="text-forest-soft text-sm md:text-base mt-2 md:mt-0" style="line-height: 1.85; font-weight: 300;">
-          Blid, evidensbaseret bearbejdning af svære oplevelser. Jeg er uddannet i EMDR og traumeinformeret tilgang. Vi arbejder altid i dit tempo.
-        </p>
-        <div class="mt-3 md:mt-0 md:pl-6">
-          <a href="#kontakt" class="btn-outline-sage px-5 py-2 text-sm font-medium rounded-sm whitespace-nowrap inline-block">book</a>
-        </div>
-      </div>
-
-      <div class="service-row emerge emerge-d3 py-7 px-4 gap-5 rounded-sm" style="border-bottom: 1px solid rgba(123, 158, 135, 0.2);">
-        <div>
-          <h3 class="font-display text-2xl text-forest mb-1" style="letter-spacing: -0.01em;">Gratis opstart</h3>
-          <p class="text-sm text-sage font-medium">30 min · ingen forpligtelse</p>
-        </div>
-        <p class="text-forest-soft text-sm md:text-base mt-2 md:mt-0" style="line-height: 1.85; font-weight: 300;">
-          Lær mig at kende. Fortæl hvad der bringer dig hertil. Vi finder ud af om vi er et godt match — helt uforpligtende og uden omkostninger.
-        </p>
-        <div class="mt-3 md:mt-0 md:pl-6">
-          <a href="#kontakt" class="btn-sage px-5 py-2 text-sm font-medium rounded-sm whitespace-nowrap inline-block">book gratis</a>
+      <!-- Rite 03 -->
+      <div class="emerge ed2 border-t border-b py-12 lg:py-16" style="border-color: rgba(74,117,88,0.15);">
+        <div class="flex gap-6 lg:gap-12 items-start">
+          <span class="rite-num" aria-hidden="true">03</span>
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+              <div>
+                <h3 class="rite-heading mb-4">Traumeterapi</h3>
+                <p class="text-forest-soft text-sm max-w-xl" style="line-height: 1.9; font-weight: 300;">
+                  Blid, evidensbaseret bearbejdning af svære oplevelser. Uddannet i EMDR og traumeinformeret tilgang. Vi arbejder altid i dit tempo — intet forsøg fremskyndes.
+                </p>
+                <p class="text-moss text-xs font-medium tracking-widest uppercase mt-4">50 min · tilpasset forløb</p>
+              </div>
+              <a href="#kontakt" class="rite-link flex-shrink-0">
+                book en samtale
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- OM MIG -->
-  <section id="om" class="py-20 lg:py-28 px-6 lg:px-8" style="background: linear-gradient(to bottom, #F5F3EF, #EAE6DF);">
+  <!-- ════════════════════════════════════════ OM MIG ════ -->
+  <section id="om" class="py-24 lg:py-32 px-6 lg:px-8" style="background: linear-gradient(to bottom, #EDE5D4, #E0D4BF);">
     <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
-      <div class="emerge">
-        <p class="text-sage text-sm font-medium tracking-widest uppercase mb-3">Om mig</p>
-        <h2 class="font-display text-4xl lg:text-5xl text-forest mb-7" style="letter-spacing: -0.02em; line-height: 1.1;">
+      <!-- Photo -->
+      <div class="emerge order-2 lg:order-1 flex justify-center">
+        <div class="photo-arch-outer relative z-10 w-72 lg:w-80 xl:w-96">
+          <div class="photo-arch relative z-10">
+            <img
+              src="https://placehold.co/480x580/C4D8CC/4A7558?text=Foto"
+              alt="Sara Kjær"
+              class="w-full object-cover"
+              style="aspect-ratio: 4/5; filter: sepia(0.1) contrast(1.04);"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div class="emerge ed1 order-1 lg:order-2">
+        <p class="text-moss text-xs font-medium tracking-[0.2em] uppercase mb-4">Om mig</p>
+        <h2 class="font-display text-4xl lg:text-5xl text-forest mb-7" style="letter-spacing: -0.025em; line-height: 1.05;">
           Menneske<br>og terapeut
         </h2>
 
-        <div class="space-y-4 text-forest-soft text-base" style="line-height: 1.85; font-weight: 300;">
-          <p>
-            Jeg er Sara Kjær — certificeret psykoterapeut MPF og uddannet psykolog med over ti års erfaring. Jeg startede som terapeut fordi jeg selv ved, hvad det vil sige at have brug for hjælp og ikke vide, hvor man skal starte.
-          </p>
-          <p>
-            I terapien er jeg nysgerrig, varm og direkte. Jeg møder dig, hvor du er — og vi finder vej frem derfra. Min tilgang er aldrig rigid; jeg tilpasser metode og tempo til din unikke situation.
-          </p>
-          <p>
-            Jeg praktiserer online i hele Danmark og har kontor i København til dem, der foretrækker et fysisk møde.
-          </p>
+        <div class="text-forest-soft mb-6" style="line-height: 1.9; font-weight: 300;">
+          <p>Jeg er Sara Kjær — certificeret psykoterapeut MPF og uddannet psykolog med over ti års erfaring. Jeg startede som terapeut fordi jeg selv ved, hvad det vil sige at have brug for hjælp og ikke vide, hvor man skal starte.</p>
+        </div>
+
+        <blockquote class="pull-quote mb-6">
+          <p>"I terapien er jeg nysgerrig, varm og direkte. Jeg møder dig, præcis hvor du er."</p>
+        </blockquote>
+
+        <div class="text-forest-soft" style="line-height: 1.9; font-weight: 300;">
+          <p>Min tilgang er aldrig rigid — jeg tilpasser metode og tempo til din unikke situation. Jeg praktiserer online i hele Danmark og har kontor i København.</p>
         </div>
 
         <div class="mt-8 flex flex-wrap gap-2">
           <span class="badge">MPF-certificeret</span>
           <span class="badge">EMDR-uddannet</span>
           <span class="badge">10+ års erfaring</span>
-          <span class="badge">Online & København</span>
+          <span class="badge">Online &amp; København</span>
         </div>
-      </div>
-
-      <div class="emerge emerge-d1">
-        <img
-          src="https://placehold.co/520x600/D4E5DA/7B9E87?text=Foto"
-          alt="Sara Kjær"
-          class="w-full object-cover rounded-sm"
-          style="aspect-ratio: 9/10;"
-        >
       </div>
 
     </div>
   </section>
 
-  <!-- PRISER -->
-  <section id="priser" class="py-20 lg:py-28 px-6 lg:px-8 max-w-6xl mx-auto">
+  <!-- ════════════════════════════════════════ STEMMER ════ -->
+  <section class="py-24 lg:py-32 px-6 lg:px-8" style="background: #EDE5D4;">
+    <div class="max-w-6xl mx-auto">
+      <div class="emerge mb-16">
+        <p class="text-moss text-xs font-medium tracking-[0.2em] uppercase mb-4">Stemmer</p>
+        <h2 class="font-display text-4xl lg:text-5xl text-forest" style="letter-spacing: -0.025em; line-height: 1.05;">Fra dem, der har gået vejen</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-10 lg:gap-14">
+        <div class="emerge">
+          <span class="testimony-mark" aria-hidden="true">"</span>
+          <p class="testimony-body mb-6">For første gang i lang tid følte jeg mig set — ikke som et problem der skulle løses, men som et menneske der fortjente ro.</p>
+          <p style="font-size: 0.78rem; color: rgba(55,74,52,0.5); letter-spacing: 0.05em;">— A.B., 33 år · individuel terapi</p>
+        </div>
+        <div class="emerge ed1">
+          <span class="testimony-mark" aria-hidden="true">"</span>
+          <p class="testimony-body mb-6">Sara hjalp os med at finde sproget igen — til hinanden og til os selv. Vi kom styrket ud af det, vi troede ville knuse os.</p>
+          <p style="font-size: 0.78rem; color: rgba(55,74,52,0.5); letter-spacing: 0.05em;">— K. &amp; J.N., 41 og 38 år · parterapi</p>
+        </div>
+        <div class="emerge ed2">
+          <span class="testimony-mark" aria-hidden="true">"</span>
+          <p class="testimony-body mb-6">Det, der overraskede mig mest, var hvor stille det hele var. Intet pres. Bare rum til at lade tingene folde sig ud i mit eget tempo.</p>
+          <p style="font-size: 0.78rem; color: rgba(55,74,52,0.5); letter-spacing: 0.05em;">— M.O., 47 år · traumeterapi</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ PRISER ════ -->
+  <section id="priser" class="py-24 lg:py-32 px-6 lg:px-8 max-w-6xl mx-auto">
     <div class="emerge mb-14">
-      <p class="text-sage text-sm font-medium tracking-widest uppercase mb-3">Priser</p>
-      <h2 class="font-display text-4xl lg:text-5xl text-forest" style="letter-spacing: -0.02em; line-height: 1.1;">
-        Åbenhed om priser
-      </h2>
-      <p class="text-forest-soft mt-4 max-w-lg font-light" style="line-height: 1.8;">
-        Gennemsigtighed er vigtig for mig. Her er hvad en session koster.
-      </p>
+      <p class="text-moss text-xs font-medium tracking-[0.2em] uppercase mb-4">Priser</p>
+      <h2 class="font-display text-4xl lg:text-5xl text-forest" style="letter-spacing: -0.025em; line-height: 1.05;">Åbenhed om priser</h2>
+      <p class="text-forest-soft mt-4 max-w-lg font-light" style="line-height: 1.85;">Gennemsigtighed er vigtig for mig. Ingen overraskelser.</p>
     </div>
 
     <div>
-      <!-- Gratis opstart -->
-      <div class="emerge price-row grid items-center gap-x-8 gap-y-3 py-7 border-t border-sage/20"
+      <div class="emerge grid items-center gap-x-8 gap-y-3 py-7 border-t price-row-line"
            style="grid-template-columns: 1fr auto auto;">
         <div>
-          <h3 class="font-display text-xl text-forest mb-1" style="letter-spacing: -0.01em;">Gratis opstart</h3>
-          <p class="text-sm text-sage font-medium mb-2">30 minutter · uforpligtende</p>
-          <p class="text-forest-soft text-sm max-w-md font-light" style="line-height: 1.75;">
-            Lær mig at kende. Fortæl hvad der bringer dig hertil. Vi finder ud af om vi er et godt match.
-          </p>
+          <h3 class="font-display text-xl text-forest mb-1" style="letter-spacing: -0.01em;">Gratis opstartssamtale</h3>
+          <p class="text-xs text-moss font-medium tracking-widest uppercase mb-2">30 minutter · uforpligtende</p>
+          <p class="text-forest-soft text-sm max-w-md font-light" style="line-height: 1.75;">Lær mig at kende. Fortæl hvad der bringer dig hertil. Ingen forpligtelse.</p>
         </div>
-        <p class="font-display text-3xl text-forest-soft hidden sm:block" style="letter-spacing: -0.02em; white-space: nowrap;">0 kr</p>
-        <a href="#kontakt" class="btn-outline-sage px-5 py-2.5 text-sm font-medium rounded-sm whitespace-nowrap">bestil</a>
+        <p class="font-display text-3xl text-forest-soft hidden sm:block" style="letter-spacing: -0.02em; white-space: nowrap;">Gratis</p>
+        <a href="#kontakt" class="btn-outline-moss px-5 py-2.5 text-sm font-medium whitespace-nowrap">bestil</a>
       </div>
 
-      <!-- Individuel — fremhævet -->
-      <div class="emerge emerge-d1 price-row grid items-center gap-x-8 gap-y-3 py-7 border-t border-sage/20 -mx-6 px-6 lg:-mx-8 lg:px-8 rounded-sm"
-           style="grid-template-columns: 1fr auto auto; background: rgba(212, 229, 218, 0.25);">
+      <div class="emerge ed1 grid items-center gap-x-8 gap-y-3 py-7 border-t price-row-line -mx-6 px-6 lg:-mx-8 lg:px-8"
+           style="grid-template-columns: 1fr auto auto; background: rgba(196,216,204,0.2);">
         <div>
           <div class="flex flex-wrap items-center gap-3 mb-1">
             <h3 class="font-display text-xl text-forest" style="letter-spacing: -0.01em;">Individuel session</h3>
-            <span class="text-xs font-medium bg-sage text-stone px-2.5 py-0.5 rounded-sm">Populær</span>
+            <span class="text-xs font-medium bg-moss text-parch px-2.5 py-0.5" style="letter-spacing: 0.04em;">Populær</span>
           </div>
-          <p class="text-sm text-sage font-medium mb-2">50 minutter</p>
-          <p class="text-forest-soft text-sm max-w-md font-light" style="line-height: 1.75;">
-            Enkeltvis eller som del af et forløb. Online i hele Danmark eller fysisk i København.
-          </p>
+          <p class="text-xs text-moss font-medium tracking-widest uppercase mb-2">50 minutter</p>
+          <p class="text-forest-soft text-sm max-w-md font-light" style="line-height: 1.75;">Enkeltvis eller som del af et forløb. Online i hele Danmark eller fysisk i København.</p>
         </div>
-        <p class="font-display text-3xl text-sage hidden sm:block" style="letter-spacing: -0.02em; white-space: nowrap;">950 kr</p>
-        <a href="#kontakt" class="btn-sage px-5 py-2.5 text-sm font-medium rounded-sm whitespace-nowrap">book nu</a>
+        <p class="font-display text-3xl text-moss hidden sm:block" style="letter-spacing: -0.02em; white-space: nowrap;">950 kr</p>
+        <a href="#kontakt" class="btn-moss px-5 py-2.5 text-sm font-medium whitespace-nowrap">book nu</a>
       </div>
 
-      <!-- Parterapi -->
-      <div class="emerge emerge-d2 price-row grid items-center gap-x-8 gap-y-3 py-7 border-t border-b border-sage/20"
+      <div class="emerge ed2 grid items-center gap-x-8 gap-y-3 py-7 border-t border-b price-row-line"
            style="grid-template-columns: 1fr auto auto;">
         <div>
           <h3 class="font-display text-xl text-forest mb-1" style="letter-spacing: -0.01em;">Parterapi</h3>
-          <p class="text-sm text-sage font-medium mb-2">80 minutter</p>
-          <p class="text-forest-soft text-sm max-w-md font-light" style="line-height: 1.75;">
-            For to. Ugentligt eller tilpasset jeres hverdag og behov.
-          </p>
+          <p class="text-xs text-moss font-medium tracking-widest uppercase mb-2">80 minutter</p>
+          <p class="text-forest-soft text-sm max-w-md font-light" style="line-height: 1.75;">For to. Ugentligt eller tilpasset jeres hverdag og behov.</p>
         </div>
         <p class="font-display text-3xl text-forest-soft hidden sm:block" style="letter-spacing: -0.02em; white-space: nowrap;">1.350 kr</p>
-        <a href="#kontakt" class="btn-outline-sage px-5 py-2.5 text-sm font-medium rounded-sm whitespace-nowrap">book nu</a>
+        <a href="#kontakt" class="btn-outline-moss px-5 py-2.5 text-sm font-medium whitespace-nowrap">book nu</a>
       </div>
     </div>
 
-    <p class="emerge text-sm text-forest-soft/50 mt-6 font-light text-center">
+    <p class="emerge text-xs text-forest-soft/40 mt-8 font-light text-center" style="letter-spacing: 0.02em;">
       Mange sygeforsikringer (fx Danmark) yder tilskud til psykoterapi — tjek dine policebetingelser.
     </p>
   </section>
 
-  <!-- FAQ -->
-  <section id="faq" class="py-16 lg:py-24 px-6 lg:px-8 max-w-3xl mx-auto">
+  <!-- ════════════════════════════════════════ FAQ ════ -->
+  <section id="faq" class="py-20 lg:py-28 px-6 lg:px-8 max-w-3xl mx-auto">
     <div class="emerge mb-12">
-      <p class="text-sage text-sm font-medium tracking-widest uppercase mb-3">FAQ</p>
-      <h2 class="font-display text-4xl text-forest" style="letter-spacing: -0.02em;">Spørgsmål og svar</h2>
+      <p class="text-moss text-xs font-medium tracking-[0.2em] uppercase mb-4">FAQ</p>
+      <h2 class="font-display text-4xl text-forest" style="letter-spacing: -0.025em;">Spørgsmål og svar</h2>
     </div>
 
-    <div class="space-y-0">
-      <div class="faq-row emerge py-6">
-        <button onclick="toggleQ(this)" class="w-full flex justify-between items-center gap-4 text-left focus-visible:outline-none focus-visible:text-sage">
+    <div>
+      <div class="faq-row emerge py-6 border-t" style="border-color: rgba(74,117,88,0.15);">
+        <button onclick="toggleQ(this)" class="w-full flex justify-between items-center gap-4 text-left focus-visible:outline-none focus-visible:text-moss">
           <span class="font-display text-xl text-forest" style="letter-spacing: -0.01em;">Hvordan foregår en online session?</span>
-          <span class="faq-plus text-sage text-2xl font-light leading-none flex-shrink-0">+</span>
+          <span class="faq-plus text-moss text-2xl font-light leading-none flex-shrink-0">+</span>
         </button>
-        <div class="faq-body"><div class="faq-inner"><p class="text-forest-soft text-sm pt-3 pb-1 font-light" style="line-height: 1.85;">Vi mødes via krypteret video (Whereby eller lignende). Du skal blot bruge en stabil forbindelse og et roligt sted at sidde. Mange klienter oplever online terapi som mindst ligeså effektivt som fysisk fremmøde.</p></div></div>
+        <div class="faq-body"><div class="faq-inner">
+          <p class="text-forest-soft text-sm pt-4 pb-2 font-light max-w-2xl" style="line-height: 1.9;">Vi mødes via krypteret video (Whereby eller lignende). Du behøver blot en stabil forbindelse og et roligt sted. Mange klienter oplever online terapi som mindst ligeså effektivt som fysisk fremmøde.</p>
+        </div></div>
       </div>
 
-      <div class="faq-row emerge emerge-d1 py-6">
-        <button onclick="toggleQ(this)" class="w-full flex justify-between items-center gap-4 text-left focus-visible:outline-none focus-visible:text-sage">
+      <div class="faq-row emerge ed1 py-6 border-t" style="border-color: rgba(74,117,88,0.15);">
+        <button onclick="toggleQ(this)" class="w-full flex justify-between items-center gap-4 text-left focus-visible:outline-none focus-visible:text-moss">
           <span class="font-display text-xl text-forest" style="letter-spacing: -0.01em;">Hvad er tavshedspligten?</span>
-          <span class="faq-plus text-sage text-2xl font-light leading-none flex-shrink-0">+</span>
+          <span class="faq-plus text-moss text-2xl font-light leading-none flex-shrink-0">+</span>
         </button>
-        <div class="faq-body"><div class="faq-inner"><p class="text-forest-soft text-sm pt-3 pb-1 font-light" style="line-height: 1.85;">Alt hvad du deler i terapien forbliver strengt fortroligt. Jeg er underlagt tavshedspligt og behandler dine oplysninger efter GDPR — kun med de yderst sjældne undtagelser der følger af loven.</p></div></div>
+        <div class="faq-body"><div class="faq-inner">
+          <p class="text-forest-soft text-sm pt-4 pb-2 font-light max-w-2xl" style="line-height: 1.9;">Alt hvad du deler i terapien forbliver strengt fortroligt. Jeg er underlagt tavshedspligt og behandler dine oplysninger efter GDPR — med de yderst sjældne undtagelser der følger af loven.</p>
+        </div></div>
       </div>
 
-      <div class="faq-row emerge emerge-d2 py-6">
-        <button onclick="toggleQ(this)" class="w-full flex justify-between items-center gap-4 text-left focus-visible:outline-none focus-visible:text-sage">
+      <div class="faq-row emerge ed2 py-6 border-t border-b" style="border-color: rgba(74,117,88,0.15);">
+        <button onclick="toggleQ(this)" class="w-full flex justify-between items-center gap-4 text-left focus-visible:outline-none focus-visible:text-moss">
           <span class="font-display text-xl text-forest" style="letter-spacing: -0.01em;">Hvor mange sessioner har jeg brug for?</span>
-          <span class="faq-plus text-sage text-2xl font-light leading-none flex-shrink-0">+</span>
+          <span class="faq-plus text-moss text-2xl font-light leading-none flex-shrink-0">+</span>
         </button>
-        <div class="faq-body"><div class="faq-inner"><p class="text-forest-soft text-sm pt-3 pb-1 font-light" style="line-height: 1.85;">Det varierer fra person til person. Nogle mærker tydelig forskel efter 6–10 sessioner; andre vælger et længere forløb. Vi evaluerer løbende og tilpasser efter dine behov og mål.</p></div></div>
+        <div class="faq-body"><div class="faq-inner">
+          <p class="text-forest-soft text-sm pt-4 pb-2 font-light max-w-2xl" style="line-height: 1.9;">Det varierer fra person til person. Nogle mærker tydelig forskel efter 6–10 sessioner; andre vælger et længere forløb. Vi evaluerer løbende og tilpasser til dine behov og mål.</p>
+        </div></div>
       </div>
     </div>
   </section>
 
-  <!-- KONTAKT -->
-  <section id="kontakt" class="py-20 lg:py-28 px-6 lg:px-8" style="background: #1D2420;">
-    <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+  <!-- ════════════════════════════════════════ KONTAKT ════ -->
+  <section id="kontakt" class="abyss-section relative overflow-hidden py-24 lg:py-32 px-6 lg:px-8">
+
+    <div class="star-field" aria-hidden="true" id="starField2"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 60% 80% at 0% 60%, rgba(74,117,88,0.06) 0%, transparent 70%);" aria-hidden="true"></div>
+
+    <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-start relative z-10">
 
       <div class="emerge">
-        <p class="text-sage text-sm font-medium tracking-widest uppercase mb-3">Kontakt</p>
-        <h2 class="font-display text-4xl lg:text-5xl text-stone mb-6" style="letter-spacing: -0.02em; line-height: 1.1;">
-          Første skridt er det sværeste
+        <p class="text-moss text-xs font-medium tracking-[0.2em] uppercase mb-4">Kontakt</p>
+        <h2 class="font-display text-4xl lg:text-5xl mb-6" style="letter-spacing: -0.025em; line-height: 1.05; color: rgba(237,229,212,0.92);">
+          Første skridt er<br>det sværeste
         </h2>
-        <p class="text-stone/70 text-base mb-10 font-light" style="line-height: 1.85;">
+        <p class="mb-10 font-light" style="line-height: 1.9; color: rgba(196,216,204,0.65);">
           Du behøver ikke have styr på, hvad du vil sige. Skriv til mig, og vi finder ud af resten. Jeg svarer inden for ét hverdagsdøgn.
         </p>
 
-        <div class="space-y-4">
+        <div class="space-y-5">
           <div class="flex gap-4 items-center">
-            <div class="w-9 h-9 rounded-sm bg-sage/15 border border-sage/20 flex items-center justify-center flex-shrink-0">
-              <div class="w-2 h-2 rounded-full bg-sage"></div>
+            <div class="w-8 h-8 flex items-center justify-center flex-shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4A7558" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
             </div>
             <div>
-              <p class="text-xs text-stone/40 uppercase tracking-wider font-medium">E-mail</p>
-              <p class="text-stone/80 text-sm mt-0.5">sara@kjaerterapi.dk</p>
+              <p class="text-xs uppercase tracking-wider font-medium" style="color: rgba(196,216,204,0.35); letter-spacing: 0.1em;">E-mail</p>
+              <p class="text-sm mt-0.5" style="color: rgba(237,229,212,0.7);">sara@kjaerterapi.dk</p>
             </div>
           </div>
           <div class="flex gap-4 items-center">
-            <div class="w-9 h-9 rounded-sm bg-sage/15 border border-sage/20 flex items-center justify-center flex-shrink-0">
-              <div class="w-2 h-2 rounded-full bg-sage"></div>
+            <div class="w-8 h-8 flex items-center justify-center flex-shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4A7558" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
             </div>
             <div>
-              <p class="text-xs text-stone/40 uppercase tracking-wider font-medium">Tilgængelighed</p>
-              <p class="text-stone/80 text-sm mt-0.5">Man–fre · 8:00–18:00</p>
+              <p class="text-xs uppercase tracking-wider font-medium" style="color: rgba(196,216,204,0.35); letter-spacing: 0.1em;">Format</p>
+              <p class="text-sm mt-0.5" style="color: rgba(237,229,212,0.7);">Online i hele Danmark · Kontor i København</p>
             </div>
           </div>
           <div class="flex gap-4 items-center">
-            <div class="w-9 h-9 rounded-sm bg-sage/15 border border-sage/20 flex items-center justify-center flex-shrink-0">
-              <div class="w-2 h-2 rounded-full bg-sage"></div>
+            <div class="w-8 h-8 flex items-center justify-center flex-shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4A7558" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
             </div>
             <div>
-              <p class="text-xs text-stone/40 uppercase tracking-wider font-medium">Format</p>
-              <p class="text-stone/80 text-sm mt-0.5">Online i hele Danmark · Kontor i København</p>
+              <p class="text-xs uppercase tracking-wider font-medium" style="color: rgba(196,216,204,0.35); letter-spacing: 0.1em;">Tilgængelighed</p>
+              <p class="text-sm mt-0.5" style="color: rgba(237,229,212,0.7);">Man–fre · 8:00–18:00</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="emerge emerge-d1">
+      <div class="emerge ed1">
         <form id="mixForm" class="space-y-5">
           <div class="grid sm:grid-cols-2 gap-5">
             <div>
-              <label for="mNavn" class="block text-xs font-medium text-stone/40 uppercase tracking-wider mb-2">Navn</label>
-              <input id="mNavn" type="text" placeholder="Dit navn" class="input-field w-full px-4 py-3 rounded-sm text-forest text-sm">
+              <label for="mNavn" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.45); letter-spacing: 0.1em;">Navn</label>
+              <input id="mNavn" type="text" placeholder="Dit navn" class="input-field w-full px-4 py-3 text-forest text-sm">
               <p id="mFejlNavn" class="field-err-msg">Skriv venligst dit navn</p>
             </div>
             <div>
-              <label for="mEmail" class="block text-xs font-medium text-stone/40 uppercase tracking-wider mb-2">E-mail</label>
-              <input id="mEmail" type="email" placeholder="din@email.dk" class="input-field w-full px-4 py-3 rounded-sm text-forest text-sm">
+              <label for="mEmail" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.45); letter-spacing: 0.1em;">E-mail</label>
+              <input id="mEmail" type="email" placeholder="din@email.dk" class="input-field w-full px-4 py-3 text-forest text-sm">
               <p id="mFejlEmail" class="field-err-msg">Skriv en gyldig e-mailadresse</p>
             </div>
           </div>
           <div>
-            <label for="mYdelse" class="block text-xs font-medium text-stone/40 uppercase tracking-wider mb-2">Hvad søger du hjælp til?</label>
-            <select id="mYdelse" class="input-field w-full px-4 py-3 rounded-sm text-forest text-sm appearance-none">
+            <label for="mYdelse" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.45); letter-spacing: 0.1em;">Hvad søger du hjælp til?</label>
+            <select id="mYdelse" class="input-field w-full px-4 py-3 text-forest text-sm appearance-none">
               <option value="">Vælg ydelse</option>
               <option>Individuel terapi</option>
               <option>Parterapi</option>
@@ -613,11 +734,11 @@
             </select>
           </div>
           <div>
-            <label for="mBesked" class="block text-xs font-medium text-stone/40 uppercase tracking-wider mb-2">Din besked</label>
-            <textarea id="mBesked" rows="4" placeholder="Fortæl kort hvad der bringer dig hertil — eller bare at du gerne vil booke en opstartssamtale." class="input-field w-full px-4 py-3 rounded-sm text-forest text-sm resize-none"></textarea>
+            <label for="mBesked" class="block text-xs font-medium uppercase tracking-wider mb-2" style="color: rgba(196,216,204,0.45); letter-spacing: 0.1em;">Din besked</label>
+            <textarea id="mBesked" rows="4" placeholder="Fortæl kort hvad der bringer dig hertil — eller bare at du gerne vil booke." class="input-field w-full px-4 py-3 text-forest text-sm resize-none"></textarea>
             <p id="mFejlBesked" class="field-err-msg">Skriv en kort besked</p>
           </div>
-          <button type="submit" id="mSendKnap" class="btn-sage w-full py-3.5 text-sm font-medium rounded-sm relative">
+          <button type="submit" id="mSendKnap" class="btn-moss w-full py-3.5 text-sm font-medium relative">
             <span class="btn-label">send besked</span>
             <span class="btn-spinner absolute inset-0 flex items-center justify-center">
               <svg class="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
@@ -626,47 +747,79 @@
               </svg>
             </span>
           </button>
-          <p class="text-xs text-stone/30 text-center font-light">Behandles fortroligt · GDPR-compliant</p>
+          <p class="text-xs text-center font-light" style="color: rgba(196,216,204,0.3);">Behandles fortroligt · GDPR-compliant</p>
         </form>
 
         <div id="formSuccessMix" role="status" aria-live="polite">
           <div class="success-icon-mix">
-            <svg width="22" height="22" fill="none" stroke="#7B9E87" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="22" height="22" fill="none" stroke="#4A7558" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="4 12 9 17 20 6"/>
             </svg>
           </div>
-          <h3 class="font-display text-2xl text-stone mb-3" style="letter-spacing: -0.01em;">Tak for din besked</h3>
-          <p class="text-stone/70 text-base font-light" style="line-height: 1.85;">Jeg vender tilbage inden for ét hverdagsdøgn.</p>
+          <h3 class="font-display text-2xl mb-3" style="letter-spacing: -0.01em; color: rgba(237,229,212,0.9);">Tak for din besked</h3>
+          <p class="font-light" style="line-height: 1.9; color: rgba(196,216,204,0.6);">Jeg glæder mig til at høre fra dig — og vender tilbage inden for ét hverdagsdøgn.</p>
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="py-10 px-6 lg:px-8 max-w-6xl mx-auto">
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-      <p class="font-display text-lg text-forest" style="letter-spacing: -0.02em;">
-        Sara Kjær <span class="font-body font-light text-forest-soft text-sm">MPF</span>
-      </p>
+  <!-- ════════════════════════════════════════ FOOTER ════ -->
+  <footer class="py-12 px-6 lg:px-8 max-w-6xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
+      <div>
+        <p class="font-display text-lg text-forest" style="letter-spacing: -0.02em;">
+          Sara Kjær <span class="font-body font-light text-forest-soft text-sm">MPF</span>
+        </p>
+        <p class="font-display italic text-xs mt-1" style="color: rgba(55,74,52,0.45); letter-spacing: 0.01em;">Alt begynder med et enkelt skridt indad.</p>
+      </div>
       <nav class="flex gap-6 text-xs text-forest-soft font-light">
-        <a href="#ydelser" class="hover:text-sage transition-colors">Ydelser</a>
-        <a href="#om" class="hover:text-sage transition-colors">Om mig</a>
-        <a href="#priser" class="hover:text-sage transition-colors">Priser</a>
-        <a href="#kontakt" class="hover:text-sage transition-colors">Kontakt</a>
+        <a href="#ydelser" class="hover:text-moss transition-colors">Ydelser</a>
+        <a href="#om" class="hover:text-moss transition-colors">Om mig</a>
+        <a href="#priser" class="hover:text-moss transition-colors">Priser</a>
+        <a href="#kontakt" class="hover:text-moss transition-colors">Kontakt</a>
       </nav>
-      <p class="text-xs text-forest-soft/40 font-light">© 2025 Sara Kjær</p>
+      <p class="text-xs font-light" style="color: rgba(55,74,52,0.35);">© 2025 Sara Kjær</p>
     </div>
   </footer>
 
   <script>
     // Mobile menu
-    document.getElementById('mBtn').addEventListener('click', () => {
-      document.getElementById('mNav').classList.toggle('hidden');
+    const mBtn = document.getElementById('mBtn');
+    const mMenu = document.getElementById('mobileMenu');
+    const mb1 = document.getElementById('mb1');
+    const mb2 = document.getElementById('mb2');
+    const mb3 = document.getElementById('mb3');
+    let menuOpen = false;
+    mBtn.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mMenu.classList.toggle('open', menuOpen);
+      mb1.style.transform = menuOpen ? 'translateY(6px) rotate(45deg)' : '';
+      mb2.style.opacity   = menuOpen ? '0' : '1';
+      mb3.style.transform = menuOpen ? 'translateY(-6px) rotate(-45deg)' : '';
     });
+    function closeMob() {
+      menuOpen = false; mMenu.classList.remove('open');
+      mb1.style.transform = ''; mb2.style.opacity = '1'; mb3.style.transform = '';
+    }
 
-    // Bidirektionel scroll reveal
-    const els = document.querySelectorAll('.emerge');
+    // Generate star fields
+    function makeStars(containerId, count) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        const size = Math.random() * 1.8 + 0.4;
+        s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;opacity:${Math.random()*0.5+0.1}`;
+        container.appendChild(s);
+      }
+    }
+    makeStars('starField', 55);
+    makeStars('starField2', 40);
+
+    // Scroll emerge
+    const emerges = document.querySelectorAll('.emerge');
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -678,11 +831,11 @@
         }
       });
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-    els.forEach(el => obs.observe(el));
+    emerges.forEach(el => obs.observe(el));
 
-    // Form validering
+    // Form
     const mixForm = document.getElementById('mixForm');
-    const mKnap = document.getElementById('mSendKnap');
+    const mKnap   = document.getElementById('mSendKnap');
     function mSetErr(inId, errId, hasErr) {
       document.getElementById(inId).classList.toggle('field-error', hasErr);
       document.getElementById(errId).classList.toggle('visible', hasErr);
@@ -718,7 +871,7 @@
 
     // FAQ
     function toggleQ(btn) {
-      const row = btn.closest('.faq-row');
+      const row  = btn.closest('.faq-row');
       const body = row.querySelector('.faq-body');
       const isOpen = body.classList.contains('open');
       document.querySelectorAll('.faq-body').forEach(b => b.classList.remove('open'));
